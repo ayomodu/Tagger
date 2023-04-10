@@ -1,10 +1,11 @@
+#!/bin/bash
 set -eou pipefail
 send_post_request(){
     case $DRONE_DEPLOY_TO in
     "")
         payload="{\"project_name\":\"$DRONE_REPO_NAME\", \"development_version\":\"$version\"}"
         curl --request POST \
-        --url http://localhost:8000/api/add_project/ \
+        --url http://$PLUGIN_API_DOMAIN_NAME/api/add_project/ \
         --header 'accept: application/json' \
         --header 'Content-Type: application/json' \
         --data "$payload"
@@ -12,7 +13,7 @@ send_post_request(){
     staging)
         payload="{\"project_name\":\"$DRONE_REPO_NAME\", \"staging_version\":\"$version\"}"
         curl --request POST \
-        --url http://localhost:8000/api/add_project/ \
+        --url http://$PLUGIN_API_DOMAIN_NAME/api/add_project/ \
         --header 'accept: application/json' \
         --header 'Content-Type: application/json' \
         --data "$payload"
@@ -20,7 +21,7 @@ send_post_request(){
     production)
         payload="{\"project_name\":\"$DRONE_REPO_NAME\", \"production_version\":\"$version\"}"
         curl --request POST \
-        --url http://localhost:8000/api/add_project/ \
+        --url http://$PLUGIN_API_DOMAIN_NAME/api/add_project/ \
         --header 'accept: application/json' \
         --header 'Content-Type: application/json' \
         --data "$payload"
@@ -57,7 +58,4 @@ get_semantic_version() {
     fi
 }
 
-DRONE_REPO_NAME="alternatereponame"
-DRONE_DEPLOY_TO="staging"
-version="10.9.4"
-
+get_semantic_version
